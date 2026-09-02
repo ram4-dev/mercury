@@ -33,12 +33,12 @@ const GATEWAY_MODELS = {
 } as const;
 
 const NAN_MODEL_IDS = {
-  analyst: "qwen3.6",
-  classifier: "qwen3.6",
-  implementer: "deepseek-v4-flash",
-  orchestrator: "qwen3.6",
-  researcher: "qwen3.6",
-  reviewer: "gemma4",
+  analyst: "glm5.3-flash",
+  classifier: "glm5.3-flash",
+  implementer: "glm5.3-flash",
+  orchestrator: "glm5.3-flash",
+  researcher: "glm5.3-flash",
+  reviewer: "glm5.3-flash",
 } as const;
 
 const buildNanModels = () => {
