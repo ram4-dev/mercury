@@ -199,11 +199,12 @@ const formatInputRequest = (request: InputRequest, botName: string): string => {
  * PR's metadata and changed-file patches are already in the session's context
  * when this runs; the repo itself is checked out into the sandbox.
  */
-const PR_SUMMARY_TASK = [
-  "A pull request was just opened. Post one comment that helps reviewers get oriented.",
-  "Open with a short paragraph saying what the PR does and why, grounded in its title, description, and diff. Never guess at intent the diff doesn't show.",
-  "Then add a markdown table breaking down the changed files: the file path, the kind of change (added, modified, removed, renamed), and what changed in one short phrase. For a very large PR, list the files that carry the substance and roll the rest into a final count row.",
-  "Close with one line pointing reviewers at where to start. This comment is a summary, not a review: don't approve, request changes, or ask the author for anything.",
+const PR_REVIEW_TASK = [
+  "A pull request was just opened. Review it and post one comment with your full code review.",
+  "Start with a short paragraph saying what the PR does and why, grounded in its title, description, and diff. Never guess at intent the diff doesn't show.",
+  "Then review the actual changes, not just the description. Read the full diff, and open the touched files when context matters. Check, in this order: correctness (does the code do what it claims; walk the logic yourself), bugs and edge cases (unhandled errors, null paths, race conditions, data loss), security (injection, authorization gaps, secrets in code, unsafe input handling), and code quality (naming, duplication, consistency with the repo's conventions, missing tests for the change's risk).",
+  "Report findings grouped by severity: blocking (bugs, security, data loss), warnings (likely problems, missing test coverage), and suggestions (quality, style). Reference the exact file and line for every finding, and say why it matters, not just what you saw. If an area is clean, say so in one line instead of padding.",
+  "Close with a clear verdict: what must be fixed before merge, if anything, and what is optional. This is a review, not a summary. Don't approve, don't request changes through GitHub's review system, and don't ask the author for anything: the findings in the comment are the deliverable.",
 ].join("\n\n");
 
 /**
@@ -241,8 +242,8 @@ const PR_SUMMARY_TASK = [
  * - `onPullRequest` dispatches only on the `opened` action and skips PRs
  *   opened by bots, which covers Dependabot and the factory's own
  *   `foreman[bot]` pull requests. It is deliberately not gated by
- *   `author_association`: summarizing outside contributors' PRs is the point,
- *   and the injected task is scoped to posting a single summary comment.
+ *   `author_association`: reviewing outside contributors' PRs is the point,
+ *   and the injected task is scoped to posting a single review comment.
  * - `onCheckSuite` is the red-CI fix loop, scoped to the factory's own work:
  *   it dispatches only when a suite completes with a failure conclusion on a
  *   pull request whose head branch carries the factory prefix, so a person's
@@ -319,6 +320,6 @@ export default githubChannel({
   },
   onPullRequest: (ctx, pullRequest) =>
     pullRequest.action === "opened" && ctx.sender.type !== "Bot"
-      ? { auth: defaultGitHubAuth(ctx), context: [PR_SUMMARY_TASK] }
+      ? { auth: defaultGitHubAuth(ctx), context: [PR_REVIEW_TASK] }
       : null,
 });

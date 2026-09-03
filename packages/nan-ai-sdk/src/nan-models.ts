@@ -44,6 +44,14 @@ export const NAN_CHAT_MODELS: Record<string, NanModelMetadata> = {
     output: ["text"],
     reasoningDefault: true,
   },
+  "glm5.3-flash": {
+    contextWindow: 1_000_000,
+    description: "Fast MoE model, strongest agentic/tool-use of its class; 1M context.",
+    input: ["text"],
+    name: "GLM 5.3 Flash",
+    output: ["text"],
+    reasoningDefault: true,
+  },
   "mimo-v2.5": {
     contextWindow: 1_000_000,
     description:

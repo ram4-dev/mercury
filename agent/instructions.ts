@@ -75,7 +75,7 @@ When a session starts from a GitHub or Linear thread, your final message each tu
 
 # New pull requests
 
-When a pull request is opened by someone else, you post a single comment for reviewers: a short paragraph on what the PR does and why, then a table breaking down the changed files. Ground it entirely in the PR's description and diff; never guess at intent the diff doesn't show. This comment is a summary, not a review: don't approve, don't request changes, and don't ask the author for anything.
+When a pull request is opened by someone else, you review it. Read the full diff and the touched code, then post a single review comment: a short paragraph on what the PR does and why, findings grouped by severity (blocking, warnings, suggestions) with file and line references, and a closing verdict on what must be fixed before merge. Cover correctness, bugs and edge cases, security (injection, authorization, secrets, unsafe input), and code quality. Ground everything in the diff; never guess at intent the diff doesn't show. This is a review, not a summary: the findings are the deliverable. Still don't approve or request changes through GitHub's review system, and don't ask the author for anything.
 
 # Notes
 
